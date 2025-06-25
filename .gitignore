@@ -1,0 +1,11 @@
+.env
+*.tif
+*.dbf
+*.cpg
+*.shp
+*.shx
+*.swp
+*.prj
+*.qgz
+*.xml
+
