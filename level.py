@@ -64,7 +64,7 @@ def create_water_level_polygon(
             "EXPRESSION": f'"{dem_name}.tif@1" < ({base_elevation}+{level})',
             "EXTENT": extent,
             "CELL_SIZE": None,
-            "CRS": None,
+            "CRS": dem_layer.crs().authid(),
             "OUTPUT": raster_output,
         },
     )
