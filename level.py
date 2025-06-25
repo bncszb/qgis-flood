@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from qgis import processing
 from qgis.core import (
@@ -8,6 +9,18 @@ from qgis.core import (
     QgsVectorLayer,
     QgsWkbTypes,
 )
+from qgis.PyQt.QtWidgets import (
+    QButtonGroup,
+    QDialog,
+    QDoubleSpinBox,
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QRadioButton,
+    QVBoxLayout,
+)
+from qgis.utils import iface
 
 
 def create_water_level_polygon(
@@ -16,7 +29,7 @@ def create_water_level_polygon(
     level,
     base_elevation,
     extent,
-    output_dir="/Users/benceszabo/gis/dunafoldvar/",
+    output_dir,
 ):
     """
     Create a polygon representing areas below a certain water level,
@@ -146,18 +159,6 @@ def create_water_level_polygon(
 
 
 # Custom dialog widget with both inputs
-from qgis.PyQt.QtWidgets import (
-    QButtonGroup,
-    QDialog,
-    QDoubleSpinBox,
-    QGroupBox,
-    QHBoxLayout,
-    QLabel,
-    QPushButton,
-    QRadioButton,
-    QVBoxLayout,
-)
-from qgis.utils import iface
 
 
 class WaterLevelDialog(QDialog):
@@ -367,9 +368,16 @@ try:
     print(f"Total water elevation: {base_elevation + level:.2f}m")
     print(f"Using extent: {extent}")
 
+    project_home = Path(QgsProject.instance().homePath())
+
     # Create polygon with user inputs
     polygon_path = create_water_level_polygon(
-        dem_layer, point_layer, level, base_elevation, extent
+        dem_layer,
+        point_layer,
+        level,
+        base_elevation,
+        extent,
+        project_home / "output",
     )
     print(
         f"Created polygon for water level: {level}m above base elevation {base_elevation:.2f}m"
